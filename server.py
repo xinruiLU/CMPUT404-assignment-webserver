@@ -54,7 +54,7 @@ class MyWebServer(socketserver.BaseRequestHandler):
         if the_request=="GET":
 
             if os.path.isfile(path):
-                get_type = path.split(".")[-1].lower()
+                get_type = path.split(".")[-1]
                 if(get_type == "css" or get_type == "html"):
                     get_type = "text/"+get_type
                     self.send_200_OK(self.request,path,name_fpath,get_type)
