@@ -31,16 +31,25 @@ import os
 class MyWebServer(socketserver.BaseRequestHandler):
 
     def handle(self):
+        #decode find from
+        #https://stackoverflow.com/questions/606191/convert-bytes-to-a-string
+        #Aaron Maenpaa
         self.data = self.request.recv(1024).strip().decode('utf-8')
         print ("Got a request of: %s\n" % self.data)
         the_file = self.data.split()[1]
         the_request = self.data.split()[0]
         #self.request.sendall(bytearray("OK",'utf-8'))
+        #get absolute path of the current file find from
+        #https://blog.csdn.net/lom9357bye/article/details/79285170
+        # S_H-A_N
         current_fpath = os.path.abspath(__file__)
-        print(current_fpath)
+        #print(current_fpath)
+        #get current path name find from
+        #https://blog.csdn.net/longshenlmj/article/details/13294871
+        # willard
         name_fpath = os.path.dirname(current_fpath)
         path = name_fpath+"/www"+the_file
-        print (path)
+        #print (path)
 
         if (os.path.abspath(path)):
             if  not "/www" in path:
@@ -52,6 +61,16 @@ class MyWebServer(socketserver.BaseRequestHandler):
 
 
         if the_request=="GET":
+            #check if path is a file or is a directory find from
+            #https://blog.csdn.net/StephenHendery/article/details/79049521
+            # stephenhendery
+
+            # looked at
+            #https://github.com/sjpartri/cmput404assignments/blob/master/CMPUT404-assignment-webserver-master/server.py
+            #Sean Partridge sjpartri
+
+            #https://github.com/sam9116/cmput404-assignment1/blob/master/server.py
+            #Sam Bao sam9116
 
             if os.path.isfile(path):
                 get_type = path.split(".")[-1]
@@ -77,7 +96,9 @@ class MyWebServer(socketserver.BaseRequestHandler):
         return
 
     def send_200_OK(self,request,path,name_fpath,get_type):
-
+        #looked at
+        #https://stackoverflow.com/questions/27206838/how-to-finish-a-socket-file-transfer-in-python
+        #Leandro
         open_file = open(path)
 
         self.request.sendall(bytearray("HTTP/1.1 200 OK \r\nContent-Type: "+ get_type+
